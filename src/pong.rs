@@ -8,6 +8,7 @@ use amethyst::renderer::{
     VirtualKeyCode, WithSpriteRender,
 };
 use crate::components::{Paddle, Side};
+use crate::components::Ball;
 
 
 pub struct Pong;
@@ -20,6 +21,10 @@ const SPRITESHEET_SIZE: (f32, f32) = (8.0, 16.0);
 pub const PADDLE_HEIGHT: f32 = 16.0;
 pub const PADDLE_WIDTH: f32 = 4.0;
 
+pub const BALL_SPRITE_SIZE: f32 = 4.0;
+
+pub const BALL_DIAMETER: f32 = 3.0;
+
 impl Pong {
     fn initialise_camera(world: &mut World) {
         world.create_entity()
@@ -30,8 +35,8 @@ impl Pong {
             .build();
     }
 
-    fn initialise_paddles(world: &mut World, spritesheet: TextureHandle) {
-        let sprite = Sprite {
+    fn initialise_paddles(world: &mut World, spritesheet: &TextureHandle) {
+        let paddle_sprite = Sprite {
             left: 0.0,
             right: PADDLE_WIDTH,
             top: 0.0,
@@ -49,7 +54,7 @@ impl Pong {
         // Create a left plank entity.
         world
             .create_entity()
-            .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
+            .with_sprite(&paddle_sprite, spritesheet.clone(), SPRITESHEET_SIZE)
             .expect("Failed to add sprite render on left paddle")
             .with(Paddle::new(Side::Left))
             .with(GlobalTransform::default())
@@ -59,11 +64,33 @@ impl Pong {
         // Create right plank entity.
         world
             .create_entity()
-            .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
+            .with_sprite(&paddle_sprite, spritesheet.clone(), SPRITESHEET_SIZE)
             .expect("Failed to add sprite render on right paddle")
             .with(Paddle::new(Side::Right))
             .with(GlobalTransform::default())
             .with(right_transform)
+            .build();
+    }
+
+    fn initialise_ball(world: &mut World, spritesheet: &TextureHandle) {
+        let ball_sprite = Sprite {
+            left: PADDLE_WIDTH,
+            right: PADDLE_WIDTH + BALL_SPRITE_SIZE,
+            top: 0.0,
+            bottom: BALL_SPRITE_SIZE,
+        };
+
+        let mut ball_transform = Transform::default();
+
+        ball_transform.translation = Vector3::new(ARENA_WIDTH * 0.5, ARENA_HEIGHT * 0.5, 0.0);
+
+        world
+            .create_entity()
+            .with_sprite(&ball_sprite, spritesheet.clone(), SPRITESHEET_SIZE)
+            .expect("Failed to add sprite render on right paddle")
+            .with(Ball::new(BALL_DIAMETER))
+            .with(GlobalTransform::default())
+            .with(ball_transform)
             .build();
     }
 }
@@ -72,6 +99,7 @@ impl<'a, 'b> State<GameData<'a, 'b>> for Pong {
     fn on_start(&mut self, data: StateData<GameData>) {
         let world = data.world;
         world.register::<Paddle>();
+        world.register::<Ball>();
 
         // Load the spritesheet necessary to render the graphics.
         let spritesheet = {
@@ -86,7 +114,8 @@ impl<'a, 'b> State<GameData<'a, 'b>> for Pong {
             )
         };
 
-        Self::initialise_paddles(world, spritesheet);
+        Self::initialise_paddles(world, &spritesheet);
+        Self::initialise_ball(world, &spritesheet);
         Self::initialise_camera(world);
     }
 

@@ -1,4 +1,6 @@
-pub use crate::components::paddle::{Paddle, Side};
+pub use self::ball::Ball;
+pub use self::paddle::{Paddle, Side};
 
+mod ball;
 mod paddle;
 
