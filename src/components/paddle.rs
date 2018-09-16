@@ -1,4 +1,5 @@
 use amethyst::ecs::prelude::{Component, DenseVecStorage};
+use crate::pong::{PADDLE_HEIGHT, PADDLE_WIDTH};
 
 #[derive(PartialEq, Eq)]
 pub enum Side {
@@ -15,9 +16,9 @@ pub struct Paddle {
 impl Paddle {
     pub fn new(side: Side) -> Paddle {
         Paddle {
-            side: side,
-            width: 1.0,
-            height: 1.0,
+            side,
+            width: PADDLE_WIDTH,
+            height: PADDLE_HEIGHT,
         }
     }
 }

@@ -4,8 +4,8 @@ use amethyst::core::transform::{GlobalTransform, Transform};
 use amethyst::input::{is_close_requested, is_key_down};
 use amethyst::prelude::*;
 use amethyst::renderer::{
-    Camera, Event, PngFormat, Projection, Sprite, Texture, TextureHandle, TextureMetadata,
-    SurfaceType, VirtualKeyCode, WithSpriteRender,
+    Camera, Event, PngFormat, Projection, Sprite, Texture, TextureHandle,
+    VirtualKeyCode, WithSpriteRender,
 };
 use crate::components::{Paddle, Side};
 use crate::components::Ball;

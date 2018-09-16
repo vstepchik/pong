@@ -1,10 +1,14 @@
 extern crate amethyst;
+extern crate rand;
+extern crate winit;
 
+use amethyst::core::frame_limiter::FrameRateLimitStrategy;
 use amethyst::core::transform::TransformBundle;
 use amethyst::input::InputBundle;
 use amethyst::prelude::*;
-use amethyst::renderer::{DisplayConfig, DrawFlat, Pipeline, PosTex, RenderBundle, Stage, ColorMask, ALPHA};
+use amethyst::renderer::{ALPHA, ColorMask, DisplayConfig, DrawFlat, Pipeline, PosTex, RenderBundle, Stage};
 use crate::pong::Pong;
+use std::time::Duration;
 
 mod pong;
 mod systems;
@@ -29,8 +33,13 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with_bundle(input_bundle)?
         .with(systems::PaddleSystem, "paddle_system", &["input_system"])
-        .with(systems::BallSystem, "ball_system", &["paddle_system"]);
-    let mut game = Application::new("./", Pong, game_data)?;
+        .with(systems::BallSystem, "ball_system", &["paddle_system"])
+        .with(systems::LauncherSystem, "launcher_system", &["input_system", "ball_system"])
+        .with(systems::BounceSystem, "bounce_system", &["paddle_system", "ball_system"]);
+    let mut game = Application::build("./", Pong)?.with_frame_limit(
+        FrameRateLimitStrategy::SleepAndYield(Duration::from_millis(2)),
+        60,
+    ).build(game_data)?;
     game.run();
     Ok(())
 }
