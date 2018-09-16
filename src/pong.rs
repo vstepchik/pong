@@ -4,8 +4,8 @@ use amethyst::core::transform::{GlobalTransform, Transform};
 use amethyst::input::{is_close_requested, is_key_down};
 use amethyst::prelude::*;
 use amethyst::renderer::{
-    Camera, Event, PngFormat, Projection, Sprite, Texture, TextureHandle,
-    VirtualKeyCode, WithSpriteRender,
+    Camera, Event, PngFormat, Projection, Sprite, Texture, TextureHandle, TextureMetadata,
+    SurfaceType, VirtualKeyCode, WithSpriteRender,
 };
 use crate::components::{Paddle, Side};
 use crate::components::Ball;
@@ -13,8 +13,8 @@ use crate::components::Ball;
 
 pub struct Pong;
 
-pub const ARENA_HEIGHT: f32 = 100.0;
-pub const ARENA_WIDTH: f32 = 100.0;
+pub const ARENA_WIDTH: f32 = 400.0;
+pub const ARENA_HEIGHT: f32 = 300.0;
 
 const SPRITESHEET_SIZE: (f32, f32) = (8.0, 16.0);
 
