@@ -35,6 +35,7 @@ fn main() -> amethyst::Result<()> {
         .with(systems::PaddleSystem, "paddle_system", &["input_system"])
         .with(systems::BallSystem, "ball_system", &["paddle_system"])
         .with(systems::LauncherSystem, "launcher_system", &["input_system", "ball_system"])
+        .with(systems::WinConditionSystem, "win_condition_system", &["ball_system"])
         .with(systems::BounceSystem, "bounce_system", &["paddle_system", "ball_system"]);
     let mut game = Application::build("./", Pong)?.with_frame_limit(
         FrameRateLimitStrategy::SleepAndYield(Duration::from_millis(2)),
