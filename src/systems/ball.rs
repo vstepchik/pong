@@ -15,7 +15,7 @@ impl<'s> System<'s> for BallSystem {
     );
 
     fn run(&mut self, (mut transforms, balls, time): Self::SystemData) {
-        for (ball, mut transform) in (&balls, &mut transforms).join() {
+        for (ball, transform) in (&balls, &mut transforms).join() {
             transform.translation[0] += ball.velocity.0 * BALL_SPEED * time.delta_seconds();
             transform.translation[1] += ball.velocity.1 * BALL_SPEED * time.delta_seconds();
         }

@@ -1,8 +1,7 @@
 use amethyst::core::Transform;
-use amethyst::ecs::{Join, Read, ReadStorage, System, WriteStorage};
+use amethyst::ecs::{Join, ReadStorage, System, WriteStorage};
 use crate::components::{Ball, Paddle, Side};
-use crate::pong::{ARENA_HEIGHT, ARENA_WIDTH, PADDLE_HEIGHT, PADDLE_WIDTH};
-use rand::random;
+use crate::pong::ARENA_HEIGHT;
 
 pub struct BounceSystem;
 
@@ -16,7 +15,7 @@ impl<'s> System<'s> for BounceSystem {
     );
 
     fn run(&mut self, (mut balls, paddles, transforms): Self::SystemData) {
-        for (mut ball, transform) in (&mut balls, &transforms).join() {
+        for (ball, transform) in (&mut balls, &transforms).join() {
             let ball_x = transform.translation[0];
             let ball_y = transform.translation[1];
 
